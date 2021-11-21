@@ -3,29 +3,50 @@ let visible = false;
 const node = document.createElement('div');
 
 let data = {
-    rank: '28',
-    spec_co: '1060',
-    region_suggestion: [
+    "rank": 5,
+    spec_co: 330.34001126578397,
+    "selected_region": {
+        "provider": "google",
+        "name": "google-us-west1",
+        "continent": "america",
+        "spec_co": 11.083000000000001e-05,
+        "price_diff": 0
+    },
+    "region_suggestion": [
         {
-            provider: 'GCP',
-            name: 'aws-eu-north-1',
-            price_diff: '1',
-            spec_co: '800',
+            "provider": "google",
+            "name": "google-europe-west6",
+            "continent": "europe",
+            "spec_co": 5.19e-05,
+            "price_diff": 3999
         },
         {
-            provider: 'GCP',
-            name: 'aws-eu-north-1',
-            price_diff: '1',
-            spec_co: '200',
+            "provider": "aws",
+            "name": "aws-eu-west-3",
+            "continent": "europe",
+            "spec_co": 6.9019999999999994e-05,
+            "price_diff": 619
+        },
+        {
+            "provider": "aws",
+            "name": "aws-sa-east-1",
+            "continent": "america",
+            "spec_co": 8.399e-05,
+            "price_diff": 11355
+        },
+        {
+            "provider": "aws",
+            "name": "aws-eu-north-1",
+            "continent": "europe",
+            "spec_co": 9.080000000000001e-05,
+            "price_diff": 619
         }
-    ],
-    // provider: 'GCP',
-    // name: 'aws-eu-north-1',
-};
+    ]
+}
 
 let createTemplate = (index) => {
     const { provider, name, price_diff, spec_co } = data.region_suggestion[index];
-    const percentage = (1 - (spec_co / data.spec_co)) * 100;
+    const percentage = (1 - (spec_co / data.selected_region.spec_co)) * 100;
 
     return `
         <div class="row">
@@ -33,7 +54,7 @@ let createTemplate = (index) => {
                 ${index + 1}.
             </div>
             <div class="col-xs-4">
-                <p>${provider}</p>
+                <p class="text-capitalize">${provider}</p>
                 <p>Region: ${name}</p>
             </div>
             <div class="col-xs-5">
@@ -59,16 +80,18 @@ node.innerHTML = `
         <h3 class="popover-title">Carbon Footprint</h3>
         <div class="popover-content">
             <div id="spec-label">
-                <p>Your spec: ${data.spec_co} Kg CO<sub>2</sub>eq / month</p>
+                <p>Your spec: ${Math.trunc(data.spec_co)} Kg CO<sub>2</sub>eq / month</p>
                 <p>🚗 This is equivalent to driving ${cars} Km</p>
             </div>
             <div class="row checkboxes">
                 <div class="col-xs-3">Better options:</div>
                 <div class="col-xs-3">
-                    <input type="checkbox"> Only Europe
+                    <input type="checkbox" id="check-continent">
+                    <span class="text-capitalize">Only ${data.selected_region.continent}</span>
                 </div>
                 <div class="col-xs-3">
-                    <input type="checkbox"> Only Azure
+                    <input type="checkbox" id="check-provider">
+                    <span class="text-capitalize">Only ${data.selected_region.provider}</span>
                 </div>
             </div>
             <hr>
